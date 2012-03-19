@@ -1,0 +1,6 @@
+Net_Server todo list:
+---------------------
+$Id: todo.txt,v 1.1 2003/10/31 16:25:37 schst Exp $
+
+- add error codes to all calls to raiseError
+- add driver based on pcntl and shm

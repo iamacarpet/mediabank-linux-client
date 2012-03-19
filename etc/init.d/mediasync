@@ -1,0 +1,58 @@
+#! /bin/sh
+
+### BEGIN INIT INFO
+# Provides:          mediasync
+# Required-Start:    $network $named $remote_fs
+# Required-Stop:     $remote_fs
+# Default-Start:     2 3 4 5
+# Default-Stop:
+# Short-Description: mediasync
+# Description:       MediaBank.org.uk Media Sync Daemon
+### END INIT INFO
+
+. /lib/lsb/init-functions
+
+[ -f /etc/default/rcS ] && . /etc/default/rcS
+PATH=/bin:/usr/bin:/sbin:/usr/sbin
+NAME="mediaSyncd"
+DAEMON="/usr/bin/php /usr/share/mediasync/mediasync.php"
+
+case "$1" in
+  start)
+	log_daemon_msg "Starting MediaBank.org.uk Sync Daemon" "$NAME"
+	start-stop-daemon --start --quiet --background --make-pidfile --pidfile "/var/run/mediasync/main.pid" --exec $DAEMON
+	log_end_msg $?
+    log_daemon_msg "Starting MediaBank.org.uk nttraffd Daemon" "nttraffd"
+    start-stop-daemon --start --quiet --background --pidfile "/var/run/nttraffd.pid" --exec "/usr/local/bin/nttraffd"
+	log_end_msg $?
+	;;
+  stop)
+	log_daemon_msg "Stopping MediaBank.org.uk Sync Daemon - Checkin Service" "$NAME"
+	start-stop-daemon --stop --quiet --pidfile "/var/run/mediasync/checkin.pid" --retry=TERM/30/KILL/5
+	rm -f "/var/run/mediasync/checkin.pid"
+	log_end_msg $?
+	log_daemon_msg "Stopping MediaBank.org.uk Sync Daemon - Downloader Service" "$NAME"
+    start-stop-daemon --stop --quiet --pidfile "/var/run/mediasync/downloader.pid" --retry=TERM/30/KILL/5
+    rm -f "/var/run/mediasync/downloader.pid"
+    log_end_msg $?
+	log_daemon_msg "Stopping MediaBank.org.uk Sync Daemon - Web Server Service" "$NAME"
+    start-stop-daemon --stop --quiet --pidfile "/var/run/mediasync/webserver.pid" --retry=TERM/30/KILL/5
+    rm -f "/var/run/mediasync/checkin.pid"
+    log_end_msg $?
+    log_daemon_msg "Stopping MediaBank.org.uk nttraffd Daemon" "$NAME"
+    start-stop-daemon --stop --quiet --pidfile "/var/run/nttraffd.pid" --retry=TERM/30/KILL/5
+    rm -f "/var/run/nttraffd.pid"
+    log_end_msg $?
+	;;
+  restart)
+  	$0 stop
+	sleep 3
+	$0 start
+	;;
+  *)
+	log_success_msg "Usage: /etc/init.d/mediasync {start|stop|restart}"
+	exit 1
+	;;
+esac
+
+exit 0

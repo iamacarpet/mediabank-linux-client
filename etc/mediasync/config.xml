@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<mediaConfig>
+	<!-- Global Configuration Options -->
+	<global>
+		<!-- This should be 0 by default, and changed to 1 when the application has been configured with the correct keys -->
+		<configured>1</configured>
+		<!-- IP Address of the management server -->
+		<serverIP>10.8.0.1</serverIP>
+		<!-- Port of the service on the management server -->
+		<serverPort>9081</serverPort>
+		<!-- The server security access key -->
+		<serverKey></serverKey>
+		<!-- The client security access key -->
+		<clientKey></clientKey>
+	</global>
+	<!-- Where should we store all the files / data? -->
+	<storage>
+		<mediaBase>/home/media</mediaBase>
+		<movieStore>/home/media/Movies</movieStore>
+		<tvStore>/home/media/TV Shows</tvStore>
+		<musicStore>/home/media/Music</musicStore>
+	</storage>
+	<!-- Configuration for the checkin service -->
+	<checkIn>
+		<!-- How many seconds should we wait between every checkin with the server, should be 30+, usually every 5 mins (300 seconds) -->
+		<everySeconds>300</everySeconds>
+	</checkIn>
+	<!-- Configuration for the web server service -->
+	<webServer>
+		<!-- The port the local web server should listen on - This should be the same as configured on the management server -->
+		<port>9081</port>
+	</webServer>
+	<!-- Configuration for the downloader service -->
+	<downloader>
+		<!-- Should we report download progress to the server? -->
+		<reportProgress>1</reportProgress>
+	</downloader>
+</mediaConfig>
